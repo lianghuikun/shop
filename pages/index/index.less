@@ -1,0 +1,69 @@
+.index_swiper{
+    swiper{
+        width: 750rpx;// 750rpx就是100%的宽
+        height: 340rpx;
+        image{
+            width: 100%;
+            // 高不用加了，image的mode为widthFix会自动适应
+        }
+    }
+}
+
+.index_cate{
+    // 外层容器看成一个伸缩很自
+    display: flex;
+    navigator{
+        padding: 20rpx;
+        // 每个超链接占1格
+        flex: 1;
+        image{
+            // 父元素多宽，图片也多宽
+            width: 100%;
+        }
+    }
+}
+
+.index_floor{
+    .floor_group{
+        .floor_title{
+            // 上下10rpx，左右不指定
+            padding: 10rpx 0;
+            image{
+                width: 100%;
+            }
+        }
+        .floor_list{
+            // 要想浮动，首先清除浮动
+            overflow: hidden;
+            navigator{
+                // 左浮动，让三个超链接在一行
+                float: left;
+                // 各占三分之一
+                width: 33.33%;
+                // 后四个超链接
+                &:nth-last-child(-n+4){
+                    /**
+                        第一张图原图的宽高是 232*386
+                        232/386=33.33vw/height
+                        那么：第一张图片的高度： height = 33.33vw * 386 /232
+                        后四张等于第一张高度的一半。
+                    */
+                    height:33.33vw * 386 /232 / 2;
+                    // 给后4张图片加左边框
+                    border-left: 10rpx solid #fff;
+                }
+                // 给2 3两个超链接加下边框
+                &:nth-child(2),  &:nth-child(3) {
+                    border-bottom: 10rpx solid #fff;
+
+                }
+                image{
+                    // 图片宽度100%，继承父元素
+                    width: 100%;
+                    // 高继承100即可
+                    height: 100%;
+                }
+            }
+        }
+    }
+}

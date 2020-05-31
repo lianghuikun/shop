@@ -1,0 +1,5 @@
+<!-- 输入view.search_input就会自动生成 -->
+<view class="search_input">
+    <!-- open-type="navigate"表示跳转到非tabbar页面 -->
+    <navigator url="/pages/search/index" open-type="navigate">搜索</navigator>
+</view>
