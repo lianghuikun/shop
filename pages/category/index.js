@@ -1,5 +1,5 @@
-import { request } from "../../request/index"
-
+import { request } from "../../request/index";
+import regeneratorRuntime from "../../lib/runtime/runtime";
 Page({
 
   /**
@@ -55,27 +55,47 @@ Page({
     }
   },
   // 获取分类数据
-  getCates() {
-    request({
-      url: "https://api-hmugo-web.itheima.net/api/public/v1/categories"
-    })
-      .then(res => {
-        // console.log(res)
-        this.Cates = res.data.message;
-        // 把接口数据放入本地存储
-        wx.setStorageSync("cates", { time: Date.now(), data: this.Cates });
-        // 构造左侧的大菜单数据
-        let leftMenuList = this.Cates.map(v => v.cat_name);
+  // getCates() {
+  //   request({
+  //     // url: "https://api-hmugo-web.itheima.net/api/public/v1/categories"
+  //     url: "/categories"
+  //   })
+  //     .then(res => {
+  //       // console.log(res)
+  //       this.Cates = res.data.message;
+  //       // 把接口数据放入本地存储
+  //       wx.setStorageSync("cates", { time: Date.now(), data: this.Cates });
+  //       // 构造左侧的大菜单数据
+  //       let leftMenuList = this.Cates.map(v => v.cat_name);
 
-        // 构造右侧的商品数据
-        let rightContent = this.Cates[0].children;
-        this.setData({
-          leftMenuList,
-          rightContent
-        });
-      })
+  //       // 构造右侧的商品数据
+  //       let rightContent = this.Cates[0].children;
+  //       this.setData({
+  //         leftMenuList,
+  //         rightContent
+  //       });
+  //     })
 
+  // },
+  // es7获取分类
+  async getCates() {
+    // 1.使用es7的async await来发送异步请求
+    const res = await request({ url: "/categories" });
+    // this.Cates = res.data.message;
+    this.Cates = res;
+    // 把接口数据放入本地存储
+    wx.setStorageSync("cates", { time: Date.now(), data: this.Cates });
+    // 构造左侧的大菜单数据
+    let leftMenuList = this.Cates.map(v => v.cat_name);
+    // 构造右侧的商品数据
+    let rightContent = this.Cates[0].children;
+    this.setData({
+      leftMenuList,
+      rightContent
+    });
   },
+
+
   // 左侧菜单的点击事件
   handleItemTap(e) {
     /**
