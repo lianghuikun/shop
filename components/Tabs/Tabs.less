@@ -1,0 +1,26 @@
+.tabs{
+    .tabs_title{
+        /* 伸缩盒子 */
+        display: flex;
+        .title_item{
+            // 伸缩盒子
+            display: flex;
+            // 文字水平居中
+            justify-content: center;
+            // 垂直居中
+            align-items: center;
+            // 占一个格子
+            flex: 1;
+            /* 上下15rpx，左右不给 */
+            padding: 15rpx 0;
+        }
+        .active{
+            // 字体颜色等于主题颜色
+            color:var(--themeColor);
+            border-bottom: 5px solid currentColor;
+        }
+    }
+    .tabs_content{
+
+    }
+}
