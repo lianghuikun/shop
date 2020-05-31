@@ -8,7 +8,9 @@
         <scroll-view class="left_menu" scroll-y>
           <viwe class="menu_item {{index===currentIndex?'acitve':''}}"
           wx:for="{{leftMenuList}}"
-          wx:key="this"
+          wx:key="*this"
+          bindtap="handleItemTap"
+          data-index="{{index}}"
           >
             {{item}}
           </viwe>

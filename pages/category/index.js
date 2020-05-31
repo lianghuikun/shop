@@ -40,5 +40,20 @@ Page({
         });
       })
 
+  },
+  // 左侧菜单的点击事件
+  handleItemTap(e){
+    /**
+     * 1.获取被点击的标题身上的索引
+     * 2.给data中的 currentIndex 赋值
+     * 3.根据不同的索引渲染不同的商品内容
+     */
+     const {index} = e.currentTarget.dataset;
+     let rightContent = this.Cates[index].children;
+     this.setData({
+      currentIndex:index,
+      rightContent
+     });
+   
   }
 })
