@@ -1,4 +1,5 @@
 /**
+ * 一.上拉加载
  * 1.用户上滑 滚动条触底 开始加载下一页数据
  *  1.找到滚动条触底事件
  *  2.判断还有没有下一页数据
@@ -11,6 +12,12 @@
  *  1.假如还有下一页数据
  *    1.当前页码++
  *    2.重新发送请求，数据请求回来，需要对数组进行拼接，而不是替换
+ * 二.下拉刷新
+ * 1.触发下拉刷新事件（需要在json文件中开启配置项）
+ * 2.重置数组数据
+ * 3.重置页码为1
+ * 4.重新发送请求
+ * 5.数据请求回来了，需要关闭loading等待效果
  */
 import { request } from "../../request/index";
 import regeneratorRuntime from "../../lib/runtime/runtime";
@@ -69,6 +76,9 @@ Page({
       // 先结构原来的数据goodsList，在解构请求返回的数据goods，然后拼接
       goodsList:[...this.data.goodsList, ...res.goods]
     });
+    // 关闭下拉刷新的窗口
+    wx.stopPullDownRefresh();
+      
   },
   // 从子组件传递过来的事件
   handleTabsItemChange(e) {
@@ -100,5 +110,17 @@ Page({
       this.QueryParams.pagenum++;
       this.getGoodsList();
     }
+  },
+  // 下拉刷新
+  onPullDownRefresh(){
+    // console.log("下拉刷新");
+    // 1.重置数据（因为上拉刷新会拼接数组，不重置会出问题）
+    this.setData({
+      goodsList:[]
+    });
+    // 2.重置页码
+    this.QueryParams.pagenum=1;
+    // 3.发送请求
+    this.getGoodsList();
   }
-})
+ })
