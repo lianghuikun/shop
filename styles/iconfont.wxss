@@ -39,7 +39,7 @@
     content: "\e61b";
   }
   
-  .icon-yixianshi-:before {
+  .icon-share:before {
     content: "\e616";
   }
   
