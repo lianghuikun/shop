@@ -23,7 +23,7 @@
     content: "\e66c";
   }
   
-  .icon-jinakangbaoicons12:before {
+  .icon-shoucang:before {
     content: "\e669";
   }
   
