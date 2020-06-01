@@ -1,5 +1,10 @@
 import { request } from "../../request/index";
 import regeneratorRuntime from "../../lib/runtime/runtime";
+/**
+ * 点击轮播图，预览大图
+ *  1.给轮播图添加点击事件
+ *  2.调用小程序的api previewimage
+ */
 Page({
 
   /**
@@ -8,7 +13,8 @@ Page({
   data: {
     goodsObj:{}
   },
-
+  // 商品对象
+  GoodsInfo:{},
   /**
    * 生命周期函数--监听页面加载
    */
@@ -21,6 +27,7 @@ Page({
   async getGoodsDetail(goods_id) {
     const goodsObj = await request({ url: "/goods/detail", data: { goods_id } });
     // console.log(res);
+    this.GoodsInfo = goodsObj;
     this.setData({
       goodsObj:{
         goods_name:goodsObj.goods_name,
@@ -35,5 +42,18 @@ Page({
       }
     });
   },
+  // 点击轮播图放大预览
+  handlePreviewImage(e){
+    // console.log('预览保存')
+    // 1.现构建要预览的图片数组
+    const urls = this.GoodsInfo.pics.map(v=>v.pics_mid);
+    // 2.接收传递过来的图片url
+    const current = e.currentTarget.dataset.url;
+    wx.previewImage({
+      current,
+      urls
+    });
+      
+  }
 
 })
