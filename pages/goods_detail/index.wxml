@@ -42,7 +42,7 @@
      <navigator open-type="switchTab" url="/pages/cart/index" class="tool_item">
         <view class="iconfont icon-gouwuche"></view>
         <view>购物车</view>
-    </navigator>
+    </navigator>c c
     <view class="tool_item btn_cart"
     bindtap="handleCartAdd"
     >加入购物车</view>
