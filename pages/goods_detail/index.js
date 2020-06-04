@@ -1,9 +1,13 @@
 import { request } from "../../request/index";
 import regeneratorRuntime from "../../lib/runtime/runtime";
 /**
- * 点击轮播图，预览大图
- *  1.给轮播图添加点击事件
- *  2.调用小程序的api previewimage
+ * 点击加入购物车
+ *  1.先绑定点击事件
+ *  2.获取缓存中的购物车数据，数组格式
+ *  3.先判断当前的商品是否已经存在于购车里
+ *  4.如果已存在，修改商品数据，数量+1，重新填充购物车数组
+ *  5.不存在购物车中，直接给购物车数组添加一个新元素，重新填充缓存
+ *  6.弹出提示
  */
 Page({
 
@@ -54,6 +58,29 @@ Page({
       urls
     });
       
+  },
+  // 加入购物车点击事件
+  handleCartAdd(){
+    // 1.获取缓存中的购物车数组,如果缓存中没有则为[]
+    let cart=wx.getStorageSync("cart") || [];
+    // 2.判断商品对象是否存在于购物车数组中
+    let index=cart.findIndex(v=>v.goods_id===this.GoodsInfo.goods_id);
+    if (index === -1) {
+      // 3.不存在，则是第一次添加
+      this.GoodsInfo.num = 1;
+      cart.push(this.GoodsInfo);
+    } else {
+      // 4.已存在，则数量+1
+      cart[index].num++;
+    }
+    // 5.把购物车添加回缓存中
+    wx.setStorageSync("cart", cart);
+    // 6.弹框提示
+    wx.showToast({
+      title: '加入成功',
+      icon: 'success',
+      // true 防止用户手抖，疯狂点击, true 1.5s之后才可以继续点击
+      mask: true
+    });
   }
-
 })
