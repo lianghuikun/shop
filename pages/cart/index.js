@@ -6,12 +6,28 @@
  *    1）假设用户点击获取收货地址的提示框， 点击确定 scope为true,可以直接调用获取收货地址方法
  *    2）加入点击取消则 scope为false，则需要诱导用户自己打开授权设置页面，当用户重新授予获取收货地址权限时获取
  *    3）假设用户从来没调用过收货地址，则scope为undefined，可以直接调用收货地址
- *   4.把获取到的收货地址放入本地存储中
+ *  4.把获取到的收货地址放入本地存储中
+ * 
+ * 2.页面加载完毕
+ *  1.获取本地存储中的地址数据
+ *  2.把数据设置给data中的一个变量
  */   
 import {getSetting, chooseAddress,openSetting} from "../../utils/asyncWx.js";
 
 import regeneratorRuntime from "../../lib/runtime/runtime";
 Page({
+  data:{
+    address:{}
+  },
+  onShow(){
+    // 1.获取缓存中的地址信息
+    const address = wx.getStorageSync("address");
+    console.log(address);
+    this.setData({
+      address
+    });
+      
+  },
   // 优化后
   // 点击收货地址
   async handleChooseAddress(){
@@ -26,7 +42,8 @@ Page({
       await openSetting();
     }
      // 3.调用获取收货地址
-     const address = await chooseAddress();
+     let address = await chooseAddress();
+     address.all = address.provinceName+address.cityName+address.countyName+address.detailInfo;
     //  console.log(address); 
     // 4.存入缓存中
      wx.setStorage({
