@@ -17,13 +17,15 @@
 <view class="cart_cotent">
     <view class="cart_title">购物车</view>
     <view class="cart_main">
-        <view class="cart_item"
+        <!-- 当cart数组长度不为0，则显示 -->
+       <block wx:if="{{cart.length!==0}}">
+            <view class="cart_item"
         wx:for="{{cart}}"
         wx:key="goods_id"
         >
             <!-- 复选框 -->
             <view class="cart_chk_wrap">
-                <checkbox-group bindchange="">
+                <checkbox-group bindchange="handleItemChange" data-id="{{item.goods_id}}">
                     <!-- 在详情页加入购物车时，应该将选中作为一个属性，一起保存到缓存 -->
                     <checkbox checked="{{item.checked}}"></checkbox>
                 </checkbox-group>
@@ -38,31 +40,37 @@
                 <view class="goods_price_wrap">
                     <view class="goods_price">¥{{item.goods_price}}</view>
                     <view class="cart_num_tool">
-                        <view class="num_edit">-</view>
+                        <view bindtap="handleItemNumEdit" data-id="{{item.goods_id}}" data-operation="-1" class="num_edit">-</view>
                         <view class="goods_num">{{item.num}}</view>
-                        <view class="num_edit">+</view>
+                        <view bindtap="handleItemNumEdit" data-id="{{item.goods_id}}" data-operation="+1" class="num_edit">+</view>
                     </view>
                 </view>
             </view>
         </view>
+       </block>
+       <block wx:else>
+           <!-- 应该自己下载或者做一个素材放在本地 -->
+           <image src="../../icons/kong_gouwuche.gif" mode="widthFix" />
+             
+       </block>
     </view>
 </view>
 <!-- 底部工具栏 -->
 <view class="footer_tool">
     <!-- 全选 -->
     <view class="all_chk_wrap">
-        <checkbox-group bindchange="">
-            <checkbox>全选</checkbox>
+        <checkbox-group bindchange="handleItemAllCheck">
+            <checkbox checked="{{allChecked}}">全选</checkbox>
         </checkbox-group>
     </view>
     <!-- 总价格 -->
     <view class="total_price_wrap">
         <view class="total_price">
             合计:
-            <text class="total_price_text">¥999</text>
+            <text class="total_price_text">¥{{totalPrice}}</text>
         </view>
         <view>包含运费</view>
     </view>
     <!-- 结算 -->
-    <view class="order_pay_wrap">结算(1)</view>
+    <view bindtap="handlePay" class="order_pay_wrap">结算({{totalNum}})</view>
 </view>
