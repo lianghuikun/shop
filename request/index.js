@@ -2,6 +2,12 @@
 // 同时发送异步代码的次数
 let ajaxTimes = 0;
 export const request=(params)=>{
+    // 如果url带有 /my/ 则自动带上请求头header
+    let header = {...params.header};
+    if (params.url.includes("/my/")) {
+        // 拼接header，带上token
+        header["Authorization"]= wx.getStorageInfoSync("token");
+    }
     ajaxTimes++;
     // 显示加载中效果
     wx.showLoading({
@@ -14,6 +20,7 @@ export const request=(params)=>{
     return new Promise((resolve, reject)=> {
       wx.request({
         ...params,
+        header:header,
         url:baseUrl + params.url,
         success:(result)=>{
             // resolve(result);

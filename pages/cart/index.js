@@ -42,9 +42,10 @@
  *  1.判断有没有收货地址信息
  *  2.判断用户有没有选购商品
  *  3.经过以上的验证，跳转到支付页面
+ *  4.支付完成，手动删除缓存中选中的商品
  */
+import {request} from "../../request/index.js"
 import { getSetting, chooseAddress, openSetting, showModal,showToast } from "../../utils/asyncWx.js";
-
 import regeneratorRuntime from "../../lib/runtime/runtime";
 Page({
   data: {
