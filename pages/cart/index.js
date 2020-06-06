@@ -17,14 +17,18 @@ import {getSetting, chooseAddress,openSetting} from "../../utils/asyncWx.js";
 import regeneratorRuntime from "../../lib/runtime/runtime";
 Page({
   data:{
-    address:{}
+    address:{},
+    cart:{}
   },
   onShow(){
     // 1.获取缓存中的地址信息
     const address = wx.getStorageSync("address");
     console.log(address);
+    // 获取缓存中的购物车数据
+    const cart = wx.getStorageSync("cart");
     this.setData({
-      address
+      address,
+      cart
     });
       
   },
