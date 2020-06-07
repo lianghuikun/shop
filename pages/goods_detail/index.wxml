@@ -9,10 +9,10 @@
 <!-- 价格 -->
 <view class="goods_price">¥{{goodsObj.goods_price}}</view>
 <!-- 名称和收藏 -->
-<view class="goods_name_row">
+<view class="goods_name_row" bindtap="handleCollect">
     <view class="goods_name">{{goodsObj.goods_name}}</view>
     <view class="goods_collect">
-        <text class="iconfont icon-shoucang"></text>
+        <text class="iconfont {{isCollect?'icon-favorite-fill':'icon-shoucang'}} "></text>
         <view class="collect_text">收藏</view>
     </view>
 </view>

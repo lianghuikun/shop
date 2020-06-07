@@ -8,6 +8,13 @@ import regeneratorRuntime from "../../lib/runtime/runtime";
  *  4.如果已存在，修改商品数据，数量+1，重新填充购物车数组
  *  5.不存在购物车中，直接给购物车数组添加一个新元素，重新填充缓存
  *  6.弹出提示
+ * 
+ * 商品收藏：
+ *  1页面onshow的时候，加载缓存中的商品收藏数据
+ *  2.判断当前商品是否被收藏，是则更改图标
+ *  3.点击商品收藏按钮
+ *    1）判断该商品是否存在缓存数组中，已存在，把该商品删除
+ *    2）如果不存在，则存入缓存中
  */
 Page({
 
@@ -15,23 +22,38 @@ Page({
    * 页面的初始数据
    */
   data: {
-    goodsObj:{}
+    goodsObj:{},
+    // 商品是否被收藏过
+    isCollect:false
   },
   // 商品对象
   GoodsInfo:{},
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onShow: function () {
+    let pages =  getCurrentPages();
+    let currentPage = pages[pages.length-1];
+    let options = currentPage.options;  
     // console.log(options);
     const { goods_id } = options;
     this.getGoodsDetail(goods_id)
+
+ 
   },
   // 获取商品详情
   async getGoodsDetail(goods_id) {
     const goodsObj = await request({ url: "/goods/detail", data: { goods_id } });
     // console.log(res);
     this.GoodsInfo = goodsObj;
+
+    // 获取缓存中的商品收藏数组
+    let collect = wx.getStorageSync("collect")||[];
+    // 判断当前商品是否被收藏了
+    let isCollect = collect.some(v=>v.goods_id===this.GoodsInfo.goods_id);
+    
+
+
     this.setData({
       goodsObj:{
         goods_name:goodsObj.goods_name,
@@ -42,7 +64,8 @@ Page({
         // 前端临时修改，要确保后台存在 1.webp  =》1.jpg 
         // 全部替换（不推荐)
         goods_introduce:goodsObj.goods_introduce.replace(/\.webp/g,'.jpg'),
-        pics:goodsObj.pics
+        pics:goodsObj.pics,
+        isCollect
       }
     });
   },
@@ -83,5 +106,40 @@ Page({
       // true 防止用户手抖，疯狂点击, true 1.5s之后才可以继续点击
       mask: true
     });
+  },
+  // 点击商品收藏图标
+  handleCollect(){
+    let isCollect = false;
+    // 1.获取缓存中的商品收藏数组
+    let collect=wx.getStorageSync("collect")||[];
+    // 2.判断该商品是否被收藏过
+    let index = collect.findIndex(v=>v.goods_id===this.GoodsInfo.goods_id);
+    // 3.当index不为-1，则已收藏过
+    if (index !== -1) {
+      // 已收藏过，则取消,根据索引删除一个
+      collect.splice(index,1);
+      isCollect = false;
+      wx.showToast({
+        title: '取消成功',
+        icon: 'success',
+        mask: true
+      });
+        
+    } else {
+      collect.push(this.GoodsInfo);
+      isCollect = true;
+      wx.showToast({
+        title: '收藏成功',
+        icon: 'success',
+        mask: true
+      });
+    }
+    // 4.存入缓存中
+    wx.setStorageSync("collect", collect);
+    // 5.修改data中的属性
+   this.setData({
+    isCollect
+   });
+      
   }
 })
